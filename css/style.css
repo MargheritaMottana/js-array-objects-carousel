@@ -23,17 +23,27 @@ h2 {
 .carosello {
     width: 80%;
     height: 90%;
-    padding: 10px 10px 0 10px;
+    padding: 10px;
     border: 1px solid black;
     border-radius: 20px;
-    /* debug */
-    /* background-color: blue; */
 }
 
 .immagini {
     height: 90%;
-    /* debug */
-    /* background-color: aquamarine; */
+}
+
+.card {
+    height: 80%;
+    text-align: center;
+    display: none;
+}
+
+.active {
+    display: block;
+}
+
+.card>* {
+    margin-bottom: 20px;
 }
 
 img {
@@ -41,11 +51,6 @@ img {
     width: 100%;
     border-radius: 20px;
     object-fit: cover;
-    display: none;
-}
-
-.immagini .active {
-    display: block;
 }
 
 .bottoni {

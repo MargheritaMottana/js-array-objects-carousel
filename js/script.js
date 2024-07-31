@@ -1,35 +1,26 @@
 /*
 
 Consegna:
-Dato un array contenente una lista di cinque immagini, creare un carosello come nello screenshot allegato.
+Dato un array di oggetti letterali con:
+ - url dell'immagine
+ - titolo
+ - descrizione
 
-MILESTONE 1
-Per prima cosa, creiamo il markup statico: costruiamo il container e inseriamo un'immagine grande al centro: avremo così la struttura base e gli stili pronti per poterci poi concentrare solamente sull'aspetto logico.
+Creare un carosello come nella foto allegata.
 
-MILESTONE 2
-Adesso rimuoviamo tutto il markup statico e inseriamo tutte le immagini dinamicamente servendoci dell'array fornito e un semplice ciclo for che concatena un template literal.
+Milestone 0:
+Come nel primo carosello realizzato, focalizziamoci prima sulla creazione del markup statico: 
+costruiamo il container e inseriamo l'immagine grande in modo da poter stilare lo slider. - ✔
 
-Tutte le immagini saranno nascoste, tranne la prima, che avrà una classe specifica che la renderà visibile.
-Al termine di questa fase ci ritroveremo con lo stesso slider stilato nella milestone 1, ma costruito dinamicamente attraverso JavaScript.
+Milestone 1:
+Ora rimuoviamo i contenuti statici e usiamo l'array di oggetti letterali per popolare dinamicamente il carosello.
+Al click dell'utente sulle frecce verso sinistra o destra,
+l'immagine attiva diventerà visibile e dovremo aggiungervi titolo e testo. - ✔
 
-MILESTONE 3
-Al click dell'utente sulle frecce, il programma cambierà l'immagine attiva, che quindi verrà visualizzata al posto della precedente.
-
-*/
-
-/*
-
-Step 1  - Scrivere html con immagini, poi commentare la sezione (per poterla inserire da js)
-        - scrivere in html bottoni per scorrere
-
-Step 2 - In css rendere invisibili tutte le immagini con "display: none"
-       - Creare in css una classe che mi permetta di rendere visibile un'immagine con "display: block"
-
-Step 3 - Scrivere in JS, un array con tutte le immagini che si vedranno nel carosello
-
-Step 4 - Scrivere Js un ciclo che legga tutte le immagini dell'array
-
-Step 5 - ascoltando il click su un bottone, riprendendo la classe css, rendere visibile l'immegine successiva o precedente
+Milestone 2:
+Aggiungere il ciclo infinito del carosello. 
+Ovvero se la slide attiva è la prima e l'utente clicca la freccia verso destra, 
+la slide che deve attivarsi sarà l'ultima e viceversa per l'ultima slide se l'utente clicca la freccia verso sinistra.
 
 */
 
@@ -37,66 +28,75 @@ Step 5 - ascoltando il click su un bottone, riprendendo la classe css, rendere v
 const immagini = document.querySelector('.immagini');
 console.log('immagini', immagini, typeof immagini)
 
-// array con tutte le immagini (e dei loro percorsi)
+// array  di oggetti con tutte le immagini, titoli e descrizioni
 const imgCarosello = [
-    'img/01.webp',
-    'img/02.webp',
-    'img/03.webp',
-    'img/04.webp',
-    'img/05.webp',
+    {
+        image: 'img/01.webp',
+        title: 'Marvel\'s Spiderman Miles Morale',
+        text: 'Experience the rise of Miles Morales as the new hero masters incredible, explosive new powers to become his own Spider-Man.',
+    }, {
+        image: 'img/02.webp',
+        title: 'Ratchet & Clank: Rift Apart',
+        text: 'Go dimension-hopping with Ratchet and Clank as they take on an evil emperor from another reality.',
+    }, {
+        image: 'img/03.webp',
+        title: 'Fortnite',
+        text: "Grab all of your friends and drop into Epic Games Fortnite, a massive 100 - player face - off that combines looting, crafting, shootouts and chaos.",
+    }, {
+        image: 'img/04.webp',
+        title: 'Stray',
+        text: 'Lost, injured and alone, a stray cat must untangle an ancient mystery to escape a long-forgotten city',
+    }, {
+        image: 'img/05.webp',
+        title: "Marvel's Avengers",
+        text: 'Marvel\'s Avengers is an epic, third-person, action-adventure game that combines an original, cinematic story with single-player and co-operative gameplay.',
+    }
 ];
 
 // creare ciclo for per leggere tutte le immagini
 for (let i = 0; i < imgCarosello.length; i++) {
     console.log('imgCarosello[i]', imgCarosello[i], typeof imgCarosello[i])
 
-    // aggiunta di if per impostare la classe active
-    // per dare active alla prima foto, i deve essere uguale a 0, che è il primo elemento dell'array
     if (i == 0) {
 
-        // una volta lette le immagini, devo scriverle in nel loro div "immagini" usando l'src contenuto nell'array:
-
         // aggiungo la classe active
-        immagini.innerHTML += `<img src="${imgCarosello[i]}" class="active">`;
-
-        // altrimenti, "scrivi" solo l'immagine senza classe
+        immagini.innerHTML += `
+                <div class="card active">
+                    <h3>${imgCarosello[i].title}</h3>
+                    <img src="${imgCarosello[i].image}">
+                    <p>${imgCarosello[i].text}</p>
+                </div>
+        `;
     }
     else {
-        immagini.innerHTML += `<img src="${imgCarosello[i]}">`;
+        immagini.innerHTML += `
+                 <div class="card">
+                    <h3>${imgCarosello[i].title}</h3>
+                    <img src="${imgCarosello[i].image}">
+                    <p>${imgCarosello[i].text}</p>
+                </div>
+        `;
     }
-};
+}
 
 // aggiunta variabile per ricordarmi l'immagine attualmente attiva
 // questo mi permetterà di poter incrementare con ++ e di cambiare l'immagine attiva
 let activeImmagine = 1;
 
-// per cambiare immagine con i bottoni, devo "ascoltare" il click
-// quindi dichiaro i bottoni, parto dal bottone di destra
-
+// dichiaro e ascolto il click sul bottone
 const dxButton = document.getElementById('dx');
-
-// ascolto ( cosa 1 = evento, cosa 2 = cosa deve accadere)
 dxButton.addEventListener('click', function () {
 
-    //aggiunta di if per dire al click di procedere solo se dentro all'array
-
     if (activeImmagine < imgCarosello.length) {
-        // controllo che il click funzioni
-        console.log('clicco bottone dx');
 
-        // prendo l'immagine che attualmente ha la classe active e la elimino
-        document.querySelector('.immagini > img:nth-child(' + activeImmagine + ')').classList.remove('active');
+        document.querySelector('.immagini > div:nth-child(' + activeImmagine + ')').classList.remove('active');
 
-        // aggiungo la variabile per cambiare la classe all'immagine
         activeImmagine++;
 
-        // aggiungo la classe active al prossimo elemento dell'array
-        document.querySelector('.immagini > img:nth-child(' + activeImmagine + ')').classList.add('active');
+        document.querySelector('.immagini > div:nth-child(' + activeImmagine + ')').classList.add('active');
     }
 
-});
-
-// aggiunta bottone sx, a cui cambio solo la variabile, che deve decrementare
+})
 
 const sxButton = document.getElementById('sx');
 
@@ -104,10 +104,10 @@ sxButton.addEventListener('click', function () {
 
     if (activeImmagine > 1) {
 
-        document.querySelector('.immagini > img:nth-child(' + activeImmagine + ')').classList.remove('active');
+        document.querySelector('.immagini > div:nth-child(' + activeImmagine + ')').classList.remove('active');
 
         activeImmagine--;
 
-        document.querySelector('.immagini > img:nth-child(' + activeImmagine + ')').classList.add('active');
+        document.querySelector('.immagini > div:nth-child(' + activeImmagine + ')').classList.add('active');
     }
-});
+})
